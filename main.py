@@ -127,13 +127,23 @@ for _ in range(num_retainers):
 
     # get hp modifier from con
     # to do
-    hp_mod = 0
+    con_mod = 0
     if ret.att_cha <= 3:
-        hp_mod = -3
+        con_mod = -3
+    elif ret.att_cha <= 5:
+        con_mod = -2
+    elif ret.att_cha <= 8:
+        con_mod = -1
+    elif ret.att_cha >= 18:
+        con_mod = 3
+    elif ret.att_cha >= 16:
+        con_mod = 2
+    elif ret.att_cha >= 13:
+        con_mod = 1
 
     # calculate hp
     for _ in range(ret.level):
-        ret.hp += max(random.randint(1, ret.rc.hd)+hp_mod,1)
+        ret.hp += max(random.randint(1, ret.rc.hd) + con_mod, 1)
 
     # get weapons, armour, and items
     ret.equipment = "Equip: "

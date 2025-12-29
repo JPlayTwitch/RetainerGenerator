@@ -79,7 +79,8 @@ dwarf = RaceClass(
 )
 
 elf = RaceClass(
-    min_int=9
+    min_int=9,
+    specitem="\nSpells: [Roll on Arcane Magic table]"
 )
 
 fighter = RaceClass(
@@ -89,7 +90,8 @@ fighter = RaceClass(
 gnome = RaceClass(
     hd=4,
     min_con=9,
-    armour = ["Leather Armour"]
+    armour = ["Leather Armour"],
+    specitem="\nSpells: [Roll on Illusionist table]"
 )
 
 half_elf = RaceClass(
@@ -104,7 +106,8 @@ halfling = RaceClass(
 illusionist = RaceClass(
     hd=4,
     armour = ["No Armour"],
-    weapons = ["Dagger"]
+    weapons = ["Dagger"],
+    specitem="\nSpells: [Roll on Illusionist table]"
 )
 
 knight = RaceClass(
@@ -117,7 +120,8 @@ knight = RaceClass(
 magic_user = RaceClass(
     hd=4,
     armour = ["No Armour"],
-    weapons = ["Dagger"]
+    weapons = ["Dagger"],
+    specitem = "\nSpells: [Roll on Arcane Magic table]"
 )
 
 paladin = RaceClass(

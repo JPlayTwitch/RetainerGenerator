@@ -1,6 +1,10 @@
 Quick tool so that I can weight hireling options dependent on my campaign world and specific cities.
 
-To add a class
+I'm using Old-School Essentials so stats are based on that, should be fine for most OSR games with minor updates. There are better generators out there, this is just what works for my game and flexibility.
+
+It has no input fields, just change variables directly.
+
+To add a class:
 1. Add it to raceclass.py
 2. Override the attributes that differ from default there
 3. Make sure to add it to at least one location so that there is a chance that it will come up

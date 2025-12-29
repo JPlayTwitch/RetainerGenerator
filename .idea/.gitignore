@@ -11,6 +11,7 @@
 # Python virtual environment
 .venv/
 **/__pycache__/
+/__pycache__/
 # Pycharm IDE nonsense
 .idea/
 !.idea/misc.xml
