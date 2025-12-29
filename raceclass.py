@@ -63,14 +63,14 @@ bard = RaceClass(
 
 cleric = RaceClass(
     weapons = ["Mace", "Sling + 20 Stones", "Staff", "War Hammer"],
-    specitem = ", Holy Symbol"
+    specitem = ", Holy Symbol\nSpells: Cleric Spell List"
 )
 
 druid = RaceClass(
     armour = ["Leather Armour"],
     weapons = ["Club", "Dagger", "Sling + 20 Stones", "Staff"],
     alignments = ["Neutral"],
-    specitem = ", Sprig of Mistletoe"
+    specitem = ", Sprig of Mistletoe\nSpells: Druid Spell List"
 )
 
 dwarf = RaceClass(
@@ -80,7 +80,7 @@ dwarf = RaceClass(
 
 elf = RaceClass(
     min_int=9,
-    specitem="\nSpells: [Roll on Arcane Magic table]"
+    specitem="\nSpells: [Roll on Magic-User table]"
 )
 
 fighter = RaceClass(
@@ -128,14 +128,15 @@ paladin = RaceClass(
     hd= 8,
     min_cha = 9,
     alignments = ["Lawful"],
-    specitem = ", Holy Symbol"
+    specitem = ", Holy Symbol\nSpells: Cleric Spell List"
 )
 
 ranger = RaceClass(
     hd=8,
     min_con=9,
     min_wis=9,
-    alignments = ["Lawful", "Neutral"]
+    alignments = ["Lawful", "Neutral"],
+    specitem = "\nSpells: Druid Spell List"
 )
 
 thief = RaceClass(
