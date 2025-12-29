@@ -18,7 +18,7 @@ num_retainers_max = 6
 # That's too high for my party atm so tunable max
 max_level = 2
 
-loc_path = 'locations\default.csv'
+loc_path = r'locations\silverkeep.csv'
 # Override for location specific weighting
 
 # 2. Number of retainers
