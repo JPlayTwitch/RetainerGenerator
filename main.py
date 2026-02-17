@@ -1,17 +1,86 @@
 import random
 random.seed()
 import pandas as pd
+import tkinter as tk
+from tkinter import scrolledtext
+from tkinter import ttk
+import math
 
 
-import raceclass
-import ret_archetype
+import generator
 
-# 1. Variables
+window = tk.Tk()
 
-# max retainers
-# village = 1, small town = 3, large town = 4, city = 6
-# +50% if town crier, -50% if bad local reputation
-num_retainers_max = 6
+# 1. Max retainers
+
+def MaxRetainers():
+    maxRetainersCalc = intSettlementSize.get()
+    if boolTownCrier:
+        maxRetainersCalc = maxRetainersCalc * 1.5
+    if boolBadRep:
+        maxRetainersCalc = maxRetainersCalc * 0.5
+    return math.ceil(maxRetainersCalc)
+
+frameOptions = tk.Frame(window)
+
+frameRetainerCount = tk.Frame(frameOptions, bd=2, relief=tk.GROOVE)
+frameSettlementSize = tk.Frame(frameRetainerCount)
+frameSettlementMod = tk.Frame(frameRetainerCount)
+
+# Settlement size frame
+intSettlementSize = tk.IntVar(window,4)
+dictSettlementValues = {"City (6)" : 6,
+                        "Large Town (4)" : 4,
+                        "Small Town (3)" : 3,
+                        "Village (1)" : 1}
+temp = 1
+for (text,value) in dictSettlementValues.items():
+    tk.Radiobutton(frameSettlementSize,
+                   text = text,
+                   variable = intSettlementSize,
+                   value = value).grid(row=temp,column=0)
+    temp += 1
+
+# Additional modifiers to settlement size
+boolTownCrier = tk.BooleanVar()
+chkTownCrier = tk.Checkbutton(frameSettlementMod,
+                              text = "Town Crier",
+                              variable = boolTownCrier)
+chkTownCrier.grid(column=0,row=0)
+
+boolBadRep = tk.BooleanVar()
+chkBadRep = tk.Checkbutton(frameSettlementMod,
+                              text = "Bad Reputation",
+                              variable = boolBadRep)
+chkBadRep.grid(column=0,row=1)
+
+# layout Max Retainers
+lblMaxRecruits = tk.Label(frameRetainerCount,text="Max Recruits:")
+lblMaxRecruits.grid(row=0,column=0,pady=10, columnspan=2)
+frameSettlementSize.grid(row=1,column=0,padx=1)
+frameSettlementMod.grid(row=1,column=1,padx=1)
+
+# 2. Max Level
+frameMaxLevel = tk.Frame(frameOptions, bd=2, relief=tk.GROOVE)
+
+#Chance
+lblLevelChance = tk.Label(frameMaxLevel,text="Higher level chance:")
+varLevelChance = tk.StringVar()
+dictLevelChance = {"Always" : 1,
+                   "1-in-2" : 2,
+                   "1-in-3" : 3,
+                   "1-in-4" : 4,
+                   "1-in-6" : 6,
+                   "1-in-10" : 10,
+                   "1-in-12" : 12,
+                   "1-in-20" : 20,
+                   "Impossible" : 0}
+
+comboLevelChance = ttk.Combobox(frameMaxLevel,textvariable=varLevelChance, values=list(dictLevelChance.keys()), state="readonly")
+comboLevelChance.current(4)
+lblLevelChance.grid(column=0,row=0)
+comboLevelChance.grid(column=0,row=1)
+
 
 # Max level
 # Carcass Crawler #2 suggests one-in-six chance for level 1d3+1 character.
@@ -21,156 +90,47 @@ max_level = 2
 loc_path = r'locations\silverkeep.csv'
 # Override for location specific weighting
 
-# 2. Number of retainers
-num_retainers = random.randint(1, num_retainers_max)
-
-# print(num_retainers)
-
 
 # 3. Import retainer class probability
 df = pd.read_csv(loc_path)
 rc_avail = [str(v) for v in df.rc.values]
 rc_prob = [float(v) for v in df.prob.values]
 
-# print(rc_avail)
-# print(rc_prob)
 
-#4. Generate individual retainers
+# 4. Generate retainer list
 
-for _ in range(num_retainers):
+def RetList():
 
-    # pick a class
-    ret_class=random.choices(rc_avail,weights=rc_prob,k=1)[0]
+    num_retainers_max = MaxRetainers()
+    num_retainers = random.randint(1, num_retainers_max)
 
-    # define retainer object
-    ret = ret_archetype.RetArchetype(raceclass.fighter,1,0,0,0,0,0,0,0, "Neutral", "")
+    level_chance = dictLevelChance[comboLevelChance.get()]
 
-    # parse classes
-    # this is hideous, fix it
-    if ret_class == "Acrobat":
-        ret.rc = raceclass.acrobat
-    elif ret_class == "Assassin":
-        ret.rc = raceclass.assassin
-    elif ret_class == "Barbarian":
-        ret.rc = raceclass.barbarian
-    elif ret_class == "Bard":
-        ret.rc = raceclass.bard
-    elif ret_class == "Cleric":
-        ret.rc = raceclass.cleric
-    elif ret_class == "Druid":
-        ret.rc = raceclass.druid
-    elif ret_class == "Dwarf":
-        ret.rc = raceclass.dwarf
-    elif ret_class == "Elf":
-        ret.rc = raceclass.elf
-    elif ret_class == "Fighter":
-        ret.rc = raceclass.fighter #not strictly necessary but
-    elif ret_class == "Gnome":
-        ret.rc = raceclass.gnome
-    elif ret_class == "Half-Elf":
-        ret.rc = raceclass.half_elf
-    elif ret_class == "Halfling":
-        ret.rc = raceclass.halfling
-    elif ret_class == "Illusionist":
-        ret.rc = raceclass.illusionist
-    elif ret_class == "Knight":
-        ret.rc = raceclass.knight
-    elif ret_class == "Magic-User":
-        ret.rc = raceclass.magic_user
-    elif ret_class == "Paladin":
-        ret.rc = raceclass.paladin
-    elif ret_class == "Ranger":
-        ret.rc = raceclass.ranger
-    elif ret_class == "Thief":
-        ret.rc = raceclass.thief
+    print(level_chance)
 
-    # 1-in-6 chance of higher level than L1
-    if random.randint(1,6) == 1:
-        ret.level = random.randint(1, max_level-1)+1
+    stat_block = ""
+    for _ in range(num_retainers):
 
-    # stats
-    ret.att_str = max(
-        random.randint(1, 6)
-        + random.randint(1, 6)
-        + random.randint(1, 6),
-        ret.rc.min_str)
+        # pick a class
+        ret_class=random.choices(rc_avail,weights=rc_prob,k=1)[0]
 
-    ret.att_int = max(
-        random.randint(1, 6)
-        + random.randint(1, 6)
-        + random.randint(1, 6),
-        ret.rc.min_int)
+        stat_block += generator.RetGen(ret_class, max_level, level_chance) + "\n\n"
 
-    ret.att_wis = max(
-        random.randint(1, 6)
-        + random.randint(1, 6)
-        + random.randint(1, 6),
-        ret.rc.min_wis)
+    txtStatBlock.delete("1.0",tk.END)
+    txtStatBlock.insert(tk.INSERT,stat_block)
 
-    ret.att_dex = max(
-        random.randint(1, 6)
-        + random.randint(1, 6)
-        + random.randint(1, 6),
-        ret.rc.min_dex)
+butGenerate = tk.Button(window,text="Recruit",command=RetList)
 
-    ret.att_con = max(
-        random.randint(1, 6)
-        + random.randint(1, 6)
-        + random.randint(1, 6),
-        ret.rc.min_con)
-
-    ret.att_cha = max(
-        random.randint(1, 6)
-        + random.randint(1, 6)
-        + random.randint(1, 6),
-        ret.rc.min_cha)
-
-    # get hp modifier from con
-    # to do
-    con_mod = 0
-    if ret.att_cha <= 3:
-        con_mod = -3
-    elif ret.att_cha <= 5:
-        con_mod = -2
-    elif ret.att_cha <= 8:
-        con_mod = -1
-    elif ret.att_cha >= 18:
-        con_mod = 3
-    elif ret.att_cha >= 16:
-        con_mod = 2
-    elif ret.att_cha >= 13:
-        con_mod = 1
-
-    # calculate hp
-    for _ in range(ret.level):
-        ret.hp += max(random.randint(1, ret.rc.hd) + con_mod, 1)
-
-    # get weapons, armour, and items
-    ret.equipment = "Equip: "
-    ret.equipment += random.choice(ret.rc.armour) + ", "
-    ret.equipment += random.choice(ret.rc.weapons)
-    ret.equipment += ", Backpack, Tinderbox, Waterskin, "
-    ret.equipment += str(random.randint(1,3)) + " Torches, "
-    ret.equipment += str(random.randint(2, 6)) + " Iron Rations"
-    ret.equipment += ret.rc.specitem
+txtStatBlock = scrolledtext.ScrolledText(window,height=15,width=80)
 
 
-    #output
+# Final Layout
 
-    stat_header = "Level " + str(ret.level) + " " + ret_class
-    stat_block = "AC [TBD], HP:"
-    stat_block += str(ret.hp)
-    stat_block += ", THAC0 [As Class], MV [TBD], SV [As Class], "
-    stat_block += "AL " + random.choice(ret.rc.alignments)
-    stat_block += ", STR " + str(ret.att_str)
-    stat_block += ", INT " + str(ret.att_int)
-    stat_block += ", WIS " + str(ret.att_wis)
-    stat_block += ", DEX " + str(ret.att_dex)
-    stat_block += ", CON " + str(ret.att_con)
-    stat_block += ", CHA " + str(ret.att_cha)
-    stat_block += ", ML [TBD]"
+frameRetainerCount.grid(row=1,column=0)
+frameMaxLevel.grid(row=1,column=1)
+frameOptions.grid(row=1,column=0)
+butGenerate.grid (row=5, column=0)
+txtStatBlock.grid (row=6, column=0)
 
-    print(stat_header)
-    print(stat_block)
-    print(ret.equipment)
-    print()
+
+window.mainloop()
