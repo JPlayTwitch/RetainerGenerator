@@ -2,10 +2,10 @@ import random
 random.seed()
 import pandas as pd
 import tkinter as tk
+from tkinter import scrolledtext
+from tkinter import ttk
 
 
-import raceclass
-import ret_archetype
 import generator
 
 window = tk.Tk()
@@ -36,18 +36,23 @@ df = pd.read_csv(loc_path)
 rc_avail = [str(v) for v in df.rc.values]
 rc_prob = [float(v) for v in df.prob.values]
 
-# print(rc_avail)
-# print(rc_prob)
 
-#4. Generate individual retainers
+def RetList():
+    stat_block = ""
+    for _ in range(num_retainers):
 
-for _ in range(num_retainers):
+        # pick a class
+        ret_class=random.choices(rc_avail,weights=rc_prob,k=1)[0]
 
-    # pick a class
-    ret_class=random.choices(rc_avail,weights=rc_prob,k=1)[0]
+        stat_block += generator.RetGen(ret_class, max_level) + "\n\n"
 
-    stat_block = generator.RetGen(ret_class, max_level)
-    print(stat_block)
-    print()
+    txtStatBlock.delete("1.0",tk.END)
+    txtStatBlock.insert(tk.INSERT,stat_block)
+
+butGenerate = tk.Button(window,text="Recruit",command=RetList)
+butGenerate.grid (row=5, column=0)
+
+txtStatBlock = scrolledtext.ScrolledText(window,height=15,width=60)
+txtStatBlock.grid (row=6, column=0)
 
 window.mainloop()
