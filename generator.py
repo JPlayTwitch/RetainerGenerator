@@ -4,7 +4,7 @@ random.seed()
 
 import ret_archetype
 
-def RetGen (ret_class,max_level):
+def RetGen (ret_class,max_level,level_chance):
     # define retainer object
     ret = ret_archetype.RetArchetype(raceclass.fighter,1,0,0,0,0,0,0,0, "Neutral", "")
 
@@ -47,9 +47,10 @@ def RetGen (ret_class,max_level):
     elif ret_class == "Thief":
         ret.rc = raceclass.thief
 
-    # 1-in-6 chance of higher level than L1
-    if random.randint(1,6) == 1:
-        ret.level = random.randint(1, max_level-1)+1
+    # Chance of higher level than L1
+    if level_chance > 0:
+        if random.randint(1,level_chance) == 1:
+            ret.level = random.randint(1, max_level-1)+1
 
     # stats
     ret.att_str = max(
