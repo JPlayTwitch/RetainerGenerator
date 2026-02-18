@@ -141,5 +141,6 @@ ranger = RaceClass(
 
 thief = RaceClass(
     hd=4,
+    armour = ["Leather Armour"],
     specitem = ", Thieves' Tools"
 )

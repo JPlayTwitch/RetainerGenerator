@@ -13,13 +13,13 @@ window = tk.Tk()
 
 # 1. Max retainers
 
-def MaxRetainers():
-    maxRetainersCalc = intSettlementSize.get()
+def max_retainers():
+    max_retainers_calc = intSettlementSize.get()
     if boolTownCrier:
-        maxRetainersCalc = maxRetainersCalc * 1.5
+        max_retainers_calc = max_retainers_calc * 1.5
     if boolBadRep:
-        maxRetainersCalc = maxRetainersCalc * 0.5
-    return math.ceil(maxRetainersCalc)
+        max_retainers_calc = max_retainers_calc * 0.5
+    return math.ceil(max_retainers_calc)
 
 frameOptions = tk.Frame(window)
 
@@ -109,7 +109,7 @@ rc_prob = [float(v) for v in df.prob.values]
 
 def RetList():
 
-    num_retainers_max = MaxRetainers()
+    num_retainers_max = max_retainers()
     num_retainers = random.randint(1, num_retainers_max)
 
     level_chance = dictLevelChance[comboLevelChance.get()]
