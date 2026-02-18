@@ -78,14 +78,22 @@ dictLevelChance = {"Always" : 1,
 
 comboLevelChance = ttk.Combobox(frameMaxLevel,textvariable=varLevelChance, values=list(dictLevelChance.keys()), state="readonly")
 comboLevelChance.current(4)
-lblLevelChance.grid(column=0,row=0)
-comboLevelChance.grid(column=0,row=1)
-
 
 # Max level
 # Carcass Crawler #2 suggests one-in-six chance for level 1d3+1 character.
 # That's too high for my party atm so tunable max
 max_level = 2
+lblMaxLevel = tk.Label(frameMaxLevel,text="Max level:")
+
+spinMaxLevel = tk.Spinbox(frameMaxLevel,from_=2,to=6, state="readonly")
+
+
+# Arrange frameMaxLevel
+lblLevelChance.grid(column=0,row=0, pady=5)
+comboLevelChance.grid(column=0,row=1, pady=5)
+lblMaxLevel.grid(column=0,row=2, pady=5)
+spinMaxLevel.grid(column=0,row=3, pady=5)
+
 
 loc_path = r'locations\silverkeep.csv'
 # Override for location specific weighting
@@ -105,8 +113,10 @@ def RetList():
     num_retainers = random.randint(1, num_retainers_max)
 
     level_chance = dictLevelChance[comboLevelChance.get()]
+    # print(level_chance)
 
-    print(level_chance)
+    max_level = int(spinMaxLevel.get())
+    # print(max_level)
 
     stat_block = ""
     for _ in range(num_retainers):
