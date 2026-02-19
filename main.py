@@ -8,10 +8,13 @@ import math
 
 
 import generator
+import raceclass
 
 window = tk.Tk()
 
-# 1. Max retainers
+############################
+##### 1. Max retainers #####
+############################
 
 def max_retainers():
     max_retainers_calc = intSettlementSize.get()
@@ -60,7 +63,10 @@ lblMaxRecruits.grid(row=0,column=0,pady=10, columnspan=2)
 frameSettlementSize.grid(row=1,column=0,padx=1)
 frameSettlementMod.grid(row=1,column=1,padx=1)
 
-# 2. Max Level
+########################
+##### 2. Max Level #####
+########################
+
 frameMaxLevel = tk.Frame(frameOptions, bd=2, relief=tk.GROOVE)
 
 #Chance
@@ -82,65 +88,99 @@ comboLevelChance.current(4)
 # Max level
 # Carcass Crawler #2 suggests one-in-six chance for level 1d3+1 character.
 # That's too high for my party atm so tunable max
-max_level = 2
 lblMaxLevel = tk.Label(frameMaxLevel,text="Max level:")
 
 spinMaxLevel = tk.Spinbox(frameMaxLevel,from_=2,to=6, state="readonly")
 
 
-# Arrange frameMaxLevel
+# layout frameMaxLevel
 lblLevelChance.grid(column=0,row=0, pady=5)
 comboLevelChance.grid(column=0,row=1, pady=5)
 lblMaxLevel.grid(column=0,row=2, pady=5)
 spinMaxLevel.grid(column=0,row=3, pady=5)
 
+#############################
+##### 3. Location/Class #####
+#############################
 
+frameLocation = tk.Frame(frameOptions, bd=2, relief=tk.GROOVE)
+
+# pick if using Location csv or class-specific generation
+intLocClass = tk.IntVar(window,1)
+radioLocClass1 = tk.Radiobutton(frameLocation, text = "Location:", variable = intLocClass, value=1)
+radioLocClass2 = tk.Radiobutton(frameLocation, text = "Class:", variable = intLocClass, value=2)
+
+# If location csv
 loc_path = r'locations\silverkeep.csv'
-# Override for location specific weighting
+
+# If class-specific
+varSpecClass = tk.StringVar()
+comboSpecClass = ttk.Combobox(frameLocation,textvariable=varSpecClass, values=list(generator.dictRetClass.keys()), state="readonly")
+comboSpecClass.current(4)
+
+# layout
+lblLocClass = tk.Label(frameLocation,text="OR")
+radioLocClass1.grid(column=0,row=0, pady=5)
+lblLocClass.grid(column=0,row=2,pady=5)
+radioLocClass2.grid(column=0,row=3,pady=5)
+comboSpecClass.grid(column=0,row=4,pady=5)
 
 
-# 3. Import retainer class probability
-df = pd.read_csv(loc_path)
-rc_avail = [str(v) for v in df.rc.values]
-rc_prob = [float(v) for v in df.prob.values]
 
 
-# 4. Generate retainer list
+########################
+##### Do the thing #####
+########################
 
-def RetList():
+def ret_list():
 
+    if intLocClass.get() == 1: # If class randomised based on location file
+        # Import retainer class probability
+        df = pd.read_csv(loc_path)
+        rc_avail = [str(v) for v in df.rc.values]
+        rc_prob = [float(v) for v in df.prob.values]
+    else: # If class preselected
+        ret_class = comboSpecClass.get()
+        print("Class")
+
+    # Choose number of retainers
     num_retainers_max = max_retainers()
     num_retainers = random.randint(1, num_retainers_max)
 
     level_chance = dictLevelChance[comboLevelChance.get()]
-    # print(level_chance)
-
     max_level = int(spinMaxLevel.get())
-    # print(max_level)
 
     stat_block = ""
     for _ in range(num_retainers):
 
-        # pick a class
-        ret_class=random.choices(rc_avail,weights=rc_prob,k=1)[0]
+        # select ret_class if based on location csv
+        if intLocClass.get() == 1:
+            ret_class=random.choices(rc_avail,weights=rc_prob,k=1)[0]
 
         stat_block += generator.RetGen(ret_class, max_level, level_chance) + "\n\n"
 
     txtStatBlock.delete("1.0",tk.END)
     txtStatBlock.insert(tk.INSERT,stat_block)
 
-butGenerate = tk.Button(window,text="Recruit",command=RetList)
-
+###########################
+##### Button & Output #####
+###########################
+butGenerate = tk.Button(window, text="Recruit", command=ret_list)
 txtStatBlock = scrolledtext.ScrolledText(window,height=15,width=80)
 
+##################
+##### Layout #####
+##################
 
-# Final Layout
-
+# Within frameOptions
 frameRetainerCount.grid(row=1,column=0)
 frameMaxLevel.grid(row=1,column=1)
+frameLocation.grid(row=1,column=2)
+
+# Final
 frameOptions.grid(row=1,column=0)
-butGenerate.grid (row=5, column=0)
-txtStatBlock.grid (row=6, column=0)
+butGenerate.grid (row=2, column=0)
+txtStatBlock.grid (row=3, column=0)
 
 
 window.mainloop()
