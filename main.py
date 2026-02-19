@@ -67,7 +67,8 @@ frameSettlementMod.grid(row=1,column=1,padx=1)
 ##### 2. Max Level #####
 ########################
 
-frameMaxLevel = tk.Frame(frameOptions, bd=2, relief=tk.GROOVE)
+frameOptionsB = tk.Frame(frameOptions)
+frameMaxLevel = tk.Frame(frameOptionsB, bd=2, relief=tk.GROOVE)
 
 #Chance
 lblLevelChance = tk.Label(frameMaxLevel,text="Higher level chance:")
@@ -119,9 +120,9 @@ comboSpecClass = ttk.Combobox(frameLocation,textvariable=varSpecClass, values=li
 comboSpecClass.current(4)
 
 # layout
-lblLocClass = tk.Label(frameLocation,text="OR")
 radioLocClass1.grid(column=0,row=0, pady=5)
-lblLocClass.grid(column=0,row=2,pady=5)
+tk.Label(frameLocation,text="[dropdown goes here]").grid(column=0,row=1,pady=5)
+tk.Label(frameLocation,text="OR").grid(column=0,row=2,pady=5)
 radioLocClass2.grid(column=0,row=3,pady=5)
 comboSpecClass.grid(column=0,row=4,pady=5)
 
@@ -165,21 +166,25 @@ def ret_list():
 ###########################
 ##### Button & Output #####
 ###########################
-butGenerate = tk.Button(window, text="Recruit", command=ret_list)
+butGenerate = tk.Button(frameOptionsB, text="Recruit", command=ret_list)
 txtStatBlock = scrolledtext.ScrolledText(window,height=15,width=80)
 
 ##################
 ##### Layout #####
 ##################
 
+# Within frameOptionsB
+frameMaxLevel.grid(row=0,column=0, sticky=tk.NS)
+butGenerate.grid (row=2, column=0, sticky=tk.S)
+
 # Within frameOptions
-frameRetainerCount.grid(row=1,column=0)
-frameMaxLevel.grid(row=1,column=1)
-frameLocation.grid(row=1,column=2)
+frameRetainerCount.grid(row=1,column=0, sticky=tk.NS)
+frameLocation.grid(row=1,column=1, sticky=tk.NS)
+frameOptionsB.grid(row=1,column=2, sticky=tk.NS)
+
 
 # Final
 frameOptions.grid(row=1,column=0)
-butGenerate.grid (row=2, column=0)
 txtStatBlock.grid (row=3, column=0)
 
 
