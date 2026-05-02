@@ -26,7 +26,7 @@ dictRetClass = {"Acrobat" : raceclass.acrobat,
 
 def RetGen (ret_class,max_level,level_chance):
     # define retainer object
-    ret = ret_archetype.RetArchetype(raceclass.fighter,1,0,0,0,0,0,0,0, "Neutral", "")
+    ret = ret_archetype.RetArchetype(raceclass.fighter,1,0,0,0,0,0,0,0, "Neutral", "", "⚨")
 
     # parse class
     ret.rc = dictRetClass.get(ret_class,raceclass.fighter)
@@ -102,10 +102,18 @@ def RetGen (ret_class,max_level,level_chance):
     ret.equipment += str(random.randint(2, 6)) + " Iron Rations"
     ret.equipment += ret.rc.specitem
 
+    # gender
+    genderFlag = random.randint(1,11)
+    if genderFlag <=5:
+        ret.gender = "♂"
+    elif genderFlag >=7:
+        ret.gender = "♀"
+
 
     #output
 
-    stat_block = "Level " + str(ret.level) + " " + ret_class + "\n"
+    stat_block = "[Name] (" + ret.gender
+    stat_block += "), Level " + str(ret.level) + " " + ret_class + "\n"
     stat_block += "AC [TBD], HP:"
     stat_block += str(ret.hp)
     stat_block += ", THAC0 [As Class], MV [TBD], SV [As Class], "

@@ -1,5 +1,5 @@
 class RetArchetype():
-    def __init__(self, rc, level, hp, att_str, att_int, att_wis, att_dex, att_con, att_cha, alignment, equipment):
+    def __init__(self, rc, level, hp, att_str, att_int, att_wis, att_dex, att_con, att_cha, alignment, equipment, gender):
         self.rc = rc
         self.level = level
         self.hp = hp
@@ -11,3 +11,4 @@ class RetArchetype():
         self.att_cha = att_cha
         self.alignment = alignment
         self.equipment = equipment
+        self.gender = gender

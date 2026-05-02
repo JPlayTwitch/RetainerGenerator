@@ -112,7 +112,7 @@ radioLocClass1 = tk.Radiobutton(frameLocation, text = "Location:", variable = in
 radioLocClass2 = tk.Radiobutton(frameLocation, text = "Class:", variable = intLocClass, value=2)
 
 # If location csv
-loc_path = r'locations\silverkeep.csv'
+loc_path = r'locations\default.csv'
 
 # If class-specific
 varSpecClass = tk.StringVar()
