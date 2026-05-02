@@ -76,17 +76,17 @@ def RetGen (ret_class,max_level,level_chance):
     # get hp modifier from con
     # to do
     con_mod = 0
-    if ret.att_cha <= 3:
+    if ret.att_con <= 3:
         con_mod = -3
-    elif ret.att_cha <= 5:
+    elif ret.att_con <= 5:
         con_mod = -2
-    elif ret.att_cha <= 8:
+    elif ret.att_con <= 8:
         con_mod = -1
-    elif ret.att_cha >= 18:
+    elif ret.att_con >= 18:
         con_mod = 3
-    elif ret.att_cha >= 16:
+    elif ret.att_con >= 16:
         con_mod = 2
-    elif ret.att_cha >= 13:
+    elif ret.att_con >= 13:
         con_mod = 1
 
     # calculate hp
